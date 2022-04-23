@@ -1,0 +1,163 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+struct student
+{
+	int stuId;
+	int stuAge;
+	char stuName[100];
+	
+	struct student*next;
+ };
+ 
+ struct student* headP=NULL;
+ struct student* tailP=NULL;
+ 
+ void printstudent(struct student* curP)
+ {
+ 	printf("学号:%d  年龄:%d  姓名:%s\n",curP->stuId,curP->stuAge,curP->stuName);
+ }
+ 
+ void printLinkedList(struct student* headP)
+ {
+ 	while(headP!=NULL)
+ 	{
+ 		printstudent(headP);
+ 		headP=headP->next;
+	 }
+ }
+ 
+ void addstudent()
+ {
+ 	struct student* nodeP=(struct student*)malloc(sizeof(struct student));
+ 	printf("请输入学号:");
+ 	scanf("%d",&nodeP->stuId);
+ 	printf("请输入年龄:");
+ 	scanf("%d",&nodeP->stuAge);
+ 	printf("请输入姓名:");
+ 	scanf("%s",&nodeP->stuName);
+ 	nodeP->next=NULL;
+ 	if(headP==NULL)
+ 	{
+ 		headP=nodeP;
+ 		tailP=nodeP;
+	}
+	else
+	{
+		tailP->next=nodeP;
+		tailP=nodeP;
+	}
+	printf("添加成功");
+ }
+ 
+ void findstudent()
+ {
+ 	printf("请输入想要查询的学生学号:");
+ 	int id;
+ 	scanf("%d",&id);
+ 	struct student* curP=headP;
+ 	int flag=0;
+ 	while(curP!=NULL)
+ 	{
+ 		if(curP->stuId==id)
+ 		{
+ 			printstudent(curP);
+ 			flag=1;
+ 			break;
+	    }
+	    else
+	    {
+	    	curP=curP->next;
+		}
+	}
+	if(flag==0)
+	{
+		printf("没有这个学生\n");
+	}
+ }
+ 
+ void printAllstudent()
+ {
+ 	if(headP==NULL)
+ 	{
+ 		printf("亲,当前没有学生哦\n");
+	}
+	else
+	{
+		printLinkedList(headP);
+	}
+ }
+ 
+ void deletestudent()
+ {
+ 	printf("请输入想要删除的学生学号:");
+ 	int id;
+ 	scanf("%d",&id);
+ 	struct student* curP=headP;
+ 	if(curP->stuId==id)
+ 	{
+ 		headP=headP->next;
+ 		free(curP);
+ 		curP=NULL;
+ 		return ;
+	}
+	
+	struct student* preP=curP;
+	curP=curP->next;
+	while(curP!=NULL)
+	{
+		if(curP->stuId==id)
+		{
+			struct student* next=curP->next;
+			preP->next=next;
+			free(curP);
+			curP=NULL;
+			printf("已经删除了\n");
+			return;
+		}
+		else 
+		{
+			preP=curP;
+			curP=curP->next;
+		}
+	}
+	
+	printf("该学生不存在，不能删除\n");
+ }
+ 
+ int main()
+ {
+ 	printf("欢迎来到简易学生信息管理系统\n"); 
+ 	printf("按1添加学生\n");
+ 	printf("按2查询学生\n");
+ 	printf("按3打印所有学生\n");
+ 	printf("按4删除学生\n");
+ 	printf("按5退出程序\n");
+ 	
+ 	while(1)
+ 	{
+ 		char c;
+ 		scanf("%c",&c);
+ 		switch(c)
+ 		{
+ 			case '1':
+ 				addstudent();
+ 				break;
+ 			case '2':
+ 				findstudent();
+ 				break;
+ 			case '3':
+ 				printAllstudent();
+ 				break;
+ 			case '4':
+ 				deletestudent();
+ 				break;
+ 			case '5':
+ 				exit(0);
+ 			default:
+ 				break;
+		 }
+	}
+ 	return 0;
+  } 
